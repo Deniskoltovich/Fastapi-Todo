@@ -17,10 +17,13 @@ services:
       - .env
 
   postgres:
-    image: postgres:15-alpine
+    image: postgres:13.9
     volumes:
-      - .:/var/lib/postgresql/data/
+      - .:/var/lib/postgresql/todo_data/
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     env_file:
       - .env
+
+volumes:
+  postges_data:

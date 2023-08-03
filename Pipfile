@@ -12,6 +12,7 @@ python-dotenv = "*"
 pydantic-settings = "*"
 sqlalchemy = "==1.4.3"
 asyncpg = "*"
+sqlalchemy-utils = "*"
 
 [dev-packages]
 flake8 = "*"
