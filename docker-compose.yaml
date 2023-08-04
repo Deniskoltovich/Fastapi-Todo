@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  fastapi:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - postgres
+    entrypoint: /code/entrypoint.sh
+
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:13.9
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
