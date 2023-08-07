@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from db.config import Base, engine
+from app.models.tasks import Task
+from app.models.todo_lists import TodoList
+from db.config import Base
 
 
 class User(Base):
