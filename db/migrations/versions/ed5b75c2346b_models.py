@@ -1,8 +1,8 @@
-"""initial
+"""models
 
-Revision ID: 88479998a5a1
-Revises: 812f86587863
-Create Date: 2023-08-04 12:13:20.800715
+Revision ID: ed5b75c2346b
+Revises: e48b0cad628a
+Create Date: 2023-08-08 13:45:12.640337
 
 """
 import sqlalchemy as sa
@@ -10,8 +10,8 @@ import sqlalchemy_utils
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = '88479998a5a1'
-down_revision = '812f86587863'
+revision = 'ed5b75c2346b'
+down_revision = 'e48b0cad628a'
 branch_labels = None
 depends_on = None
 
@@ -23,6 +23,7 @@ def upgrade() -> None:
     sa.Column('username', sa.String(length=64), nullable=False),
     sa.Column('email', sa.String(length=128), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
+    sa.Column('status', sqlalchemy_utils.types.choice.ChoiceType([('Admin', 'Admin'), ('User', 'User')]), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
@@ -39,7 +40,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=256), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('status', sqlalchemy_utils.types.choice.ChoiceType([('in_progress', 'In progress'), ('done', 'Done')]), nullable=True),
+    sa.Column('status', sqlalchemy_utils.types.choice.ChoiceType([("in_progress", "In progress"), ("done", "Done")]), nullable=True),
     sa.Column('todo_list_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['todo_list_id'], ['todo_lists.id'], ),
     sa.PrimaryKeyConstraint('id')

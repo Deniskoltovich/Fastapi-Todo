@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 
@@ -21,13 +21,17 @@ async def create_user(user_data: UserIn) -> UserOut:
     return user
 
 
-@router.get('/', response_model=List[UserOut])
-async def get_users(
+@router.get('/', response_model=Optional[List[UserOut] | UserOut])
+async def list_users(
     user: User = Depends(AuthService.get_current_user_from_token),
 ):
+    if user.role == User.Admin:
+        async with async_session() as session:
+            users = await UserRepository(session).get_all()
+        return users
     async with async_session() as session:
-        users = await UserRepository(session).get_all()
-    return users
+        user = await UserRepository(session).get_by_username(user.username)
+    return user
 
 
 # @router.post('/{user_id}')
