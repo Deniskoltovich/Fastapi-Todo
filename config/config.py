@@ -7,6 +7,9 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     APP_HOST: str
     APP_PORT: int
+    SECRET_KEY: str
+    JWT_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     POSTGRES_DB: str
     POSTGRES_USER: str

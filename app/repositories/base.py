@@ -19,7 +19,7 @@ class BaseRepository:
 
     async def _get_all(self, model_cls):
         result = await self.session.execute(select(model_cls))
-        return result
+        return result.scalars().all()
 
     async def _update(self, model_csl, instance, values: dict):
         query = (
