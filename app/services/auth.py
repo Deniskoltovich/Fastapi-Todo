@@ -13,7 +13,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
 from app.repositories.user import UserRepository
-from app.services.user import UserService
+from app.services.user.common import UserService
+from app.services.user.password_hasher import PasswordService
 from config.config import settings
 from db.config import async_session
 
@@ -45,7 +46,7 @@ class AuthService:
         user = await UserRepository(db).get_by_username(username)
         if user is None:
             return None
-        if not UserService.verify_password(password, user.password):
+        if not PasswordService.verify_password(password, user.password):
             return None
         return user
 
