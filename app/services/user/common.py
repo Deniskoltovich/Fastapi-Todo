@@ -16,17 +16,18 @@ class UserService:
     async def get_user(id: int) -> UserOut:
         async with async_session() as session:
             user = await UserRepository(session).get(id)
+
         return user
 
     @staticmethod
     async def update_user(id: int, user_data: UserOut):
         async with async_session() as session:
             user = await UserRepository(session).get(id)
-            updated_user = await UserRepository(session).update(
+            await UserRepository(session).update(
                 instance=user, values=user_data.model_dump()
             )
             await session.commit()
-        return updated_user
+        return None
 
     @staticmethod
     async def delete(user_id):

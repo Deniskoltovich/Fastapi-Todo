@@ -10,10 +10,10 @@ from db.config import Base
 class User(Base):
     __tablename__ = "users"
 
-    Admin = 'Admin'
+    ADMIN = 'Admin'
     USER = 'User'
 
-    ROLES = [('Admin', Admin), ('User', USER)]
+    ROLES = [('Admin', ADMIN), ('User', USER)]
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(64), nullable=False)

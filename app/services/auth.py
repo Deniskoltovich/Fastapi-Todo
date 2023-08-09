@@ -7,6 +7,7 @@ from fastapi.security import (
     HTTPBasic,
     HTTPBasicCredentials,
     OAuth2PasswordBearer,
+    OAuth2PasswordRequestForm,
 )
 from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,6 +23,30 @@ security = HTTPBasic()
 
 
 class AuthService:
+    @staticmethod
+    async def authenticate_user(form_data: OAuth2PasswordRequestForm):
+        async with async_session() as session:
+            user = await AuthService._authenticate_user(
+                form_data.username, form_data.password, session
+            )
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+            )
+        return AuthService.generate_token(user)
+
+    @staticmethod
+    def generate_token(user: User):
+        access_token_expires = timedelta(
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+        access_token = AuthService.create_access_token(
+            data={"username": user.username},
+            expires_delta=access_token_expires,
+        )
+        return access_token
+
     @staticmethod
     def create_access_token(
         data: dict, expires_delta: Optional[timedelta] = None
@@ -40,7 +65,7 @@ class AuthService:
         return encoded_jwt
 
     @staticmethod
-    async def authenticate_user(
+    async def _authenticate_user(
         username: str, password: str, db: AsyncSession
     ) -> Union[User, None]:
         user = await UserRepository(db).get_by_username(username)

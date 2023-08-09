@@ -11,9 +11,9 @@ class BaseRepository:
         await self.session.flush()
         return instance
 
-    async def _get(self, model_cls, primary_key):
+    async def _get(self, model_cls, filter):
         result = await self.session.execute(
-            select(model_cls).filter_by(id=primary_key)
+            select(model_cls).filter_by(id=filter)
         )
         return result.scalar()
 

@@ -2,6 +2,7 @@ from typing import List
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.models.user import User
 from app.repositories.base import BaseRepository
@@ -19,6 +20,15 @@ class UserRepository(BaseRepository):
     async def get(self, pk):
         result = await self._get(User, pk)
         return result
+
+    async def get_todo_lists(self, user_id: int):
+        result = await self.session.execute(
+            select(User)
+            .filter_by(id=user_id)
+            .order_by(User.id)
+            .options(selectinload(User.todo_lists))
+        )
+        return result.scalars().first().todo_lists
 
     async def get_by_username(self, username):
         result = await self.session.execute(

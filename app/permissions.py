@@ -11,7 +11,8 @@ class RoleChecker:
         self.allowed_role = allowed_role
 
     def __call__(
-        self, user: User = Depends(AuthService.get_current_user_from_token)
+        self,
+        user: User = Depends(AuthService.get_current_user_from_token),
     ):
         if user.role not in self.allowed_role:
             raise HTTPException(

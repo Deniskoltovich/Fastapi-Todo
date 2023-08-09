@@ -10,8 +10,8 @@ from db.config import Base
 class Task(Base):
     __tablename__ = 'tasks'
 
-    IN_PROGRESS = 'In progress'
-    DONE = 'Done'
+    IN_PROGRESS = 'in_progress'
+    DONE = 'done'
 
     STATUSES = [('in_progress', IN_PROGRESS), ('done', DONE)]
 
