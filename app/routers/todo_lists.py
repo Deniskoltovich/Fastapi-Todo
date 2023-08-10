@@ -13,14 +13,14 @@ router = APIRouter(
 )
 
 
-@router.get('/')
+@router.get('/', response_model=List[TodoListSchema])
 async def list_todos(
     user: User = Depends(AuthService.get_current_user_from_token),
 ):
     return await TodoListService.list(user)
 
 
-@router.get('/{task_id}')
+@router.get('/{todo_list_id}', response_model=TodoListSchema)
 async def get_todo_by_id(
     todo_list_id: int,
     user: User = Depends(AuthService.get_current_user_from_token),
@@ -28,22 +28,23 @@ async def get_todo_by_id(
     return await TodoListService.get(todo_list_id, user)
 
 
-@router.post('/', response_model=TodoListIn)
+@router.post('/', response_model=TodoListSchema)
 async def create_todo_list(todo_list: TodoListIn):
     return await TodoListService.create(todo_list)
 
 
-@router.delete('/{task_id}')
+@router.delete('/{todo_list_id}')
 async def delete_todo_list(
-    task_id: int, user: User = Depends(AuthService.get_current_user_from_token)
-):
-    return await TodoListService.delete_todo_list(task_id, user)
-
-
-@router.put('/{task_id}', response_model=TodoListSchema)
-async def update_todo_list(
-    task_id: int,
-    task: TodoListSchema,
+    todo_list_id: int,
     user: User = Depends(AuthService.get_current_user_from_token),
 ):
-    return await TodoListService.update(task_id, task, user)
+    return await TodoListService.delete_todo_list(todo_list_id, user)
+
+
+@router.put('/{todo_list_id}', response_model=TodoListSchema)
+async def update_todo_list(
+    todo_list_id: int,
+    todo_list: TodoListSchema,
+    user: User = Depends(AuthService.get_current_user_from_token),
+):
+    return await TodoListService.update(todo_list_id, todo_list, user)

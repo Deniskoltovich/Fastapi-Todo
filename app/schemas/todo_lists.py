@@ -9,8 +9,6 @@ from app.schemas.tasks import TaskSchema
 class TodoListSchema(BaseModel):
     name: str = Field(description='todo list name')
     description: Optional[str] = None
-    tasks: Union[typing.List[TaskSchema], list] = []
-    user_id: int
     id: int
 
     class Config:
@@ -22,7 +20,6 @@ class TodoListIn(BaseModel):
     name: str = Field(description='todo list name')
     description: Optional[str] = None
     user_id: int
-    tasks: Optional[typing.List[TaskSchema]] = []
 
     class Config:
         orm_mode = True

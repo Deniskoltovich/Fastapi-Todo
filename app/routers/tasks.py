@@ -14,14 +14,15 @@ router = APIRouter(
 )
 
 
-@router.get('/')
+@router.get('/', response_model=List[TaskSchema])
 async def get_tasks(
     user: User = Depends(AuthService.get_current_user_from_token),
 ):
-    return await TaskService.list_tasks(user)
+    tasks = await TaskService.list_tasks(user)
+    return tasks
 
 
-@router.get('/{task_id}')
+@router.get('/{task_id}', response_model=TaskSchema)
 async def get_task_by_id(
     task_id: int, user: User = Depends(AuthService.get_current_user_from_token)
 ):
@@ -49,7 +50,7 @@ async def update_task(
     return await TaskService.update(task_id, task, user)
 
 
-@router.get('/{task_id}/done')
+@router.get('/{task_id}/done', response_model=TaskSchema)
 async def complete_task(
     task_id: int, user=Depends(AuthService.get_current_user_from_token)
 ):
