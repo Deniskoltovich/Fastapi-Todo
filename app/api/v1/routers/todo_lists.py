@@ -1,5 +1,3 @@
-from typing import Any, List, Union
-
 from fastapi import APIRouter, Depends
 
 from app.models.user import User
@@ -13,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=List[TodoListSchema])
+@router.get('/')
 async def list_todos(
     user: User = Depends(AuthService.get_current_user_from_token),
 ):

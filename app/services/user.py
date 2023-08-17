@@ -2,10 +2,21 @@ from typing import List
 
 from app.repositories.user import UserRepository
 from app.schemas.users import UserOut
+from app.utils.password_hasher import PasswordHasher
 from db.config import async_session
 
 
 class UserService:
+    @staticmethod
+    async def create_user(user_data: dict):
+        password = user_data.pop('password')
+        user_data['password'] = PasswordHasher.get_password_hash(password)
+        async with async_session() as session:
+            user = await UserRepository(session).create(user_data)
+            await session.commit()
+
+        return user
+
     @staticmethod
     async def list_users() -> List[UserOut]:
         async with async_session() as session:

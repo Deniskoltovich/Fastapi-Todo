@@ -1,11 +1,9 @@
-import secrets
 from datetime import datetime, timedelta
-from typing import Annotated, Optional, Union
+from typing import Optional, Union
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import (
     HTTPBasic,
-    HTTPBasicCredentials,
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,
 )
@@ -14,8 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
 from app.repositories.user import UserRepository
-from app.services.user.common import UserService
-from app.services.user.password_hasher import PasswordService
+from app.utils.password_hasher import PasswordHasher
 from config.config import settings
 from db.config import async_session
 
@@ -71,13 +68,13 @@ class AuthService:
         user = await UserRepository(db).get_by_username(username)
         if user is None:
             return None
-        if not PasswordService.verify_password(password, user.password):
+        if not PasswordHasher.verify_password(password, user.password):
             return None
         return user
 
     @staticmethod
     async def get_current_user_from_token(
-        token: str = Depends(OAuth2PasswordBearer('auth/token')),
+        token: str = Depends(OAuth2PasswordBearer('api/v1/auth/token')),
     ):
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

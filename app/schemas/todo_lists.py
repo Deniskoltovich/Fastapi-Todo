@@ -1,5 +1,4 @@
-import typing
-from typing import Optional, Union
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -10,6 +9,7 @@ class TodoListSchema(BaseModel):
     name: str = Field(description='todo list name')
     description: Optional[str] = None
     id: int
+    tasks: List[TaskSchema] = []
 
     class Config:
         orm_mode = True

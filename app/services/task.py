@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+from app.enums import TaskStatus
 from app.models.tasks import Task
 from app.models.user import User
 from app.repositories.task import TaskRepository
@@ -57,7 +58,7 @@ class TaskService:
     async def complete_task(id: int, user: User):
         async with async_session() as session:
             task = await TaskService.get_task(id, user)
-            task.status = Task.DONE
+            task.status = TaskStatus.DONE
             session.add(task)
             await session.commit()
 

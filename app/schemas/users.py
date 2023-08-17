@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserOut(BaseModel):
     username: str = Field(description='username')
-    email: str = Field(description="user email")
+    email: EmailStr = Field(description="user email")
 
 
 class UserIn(UserOut):

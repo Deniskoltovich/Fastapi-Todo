@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union
+from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 
@@ -6,8 +6,7 @@ from app.models.user import User
 from app.permissions import RoleChecker
 from app.schemas.users import UserIn, UserOut
 from app.services.auth import AuthService
-from app.services.user.common import UserService
-from app.services.user.creation import CreateUserService
+from app.services.user import UserService
 
 router = APIRouter(
     prefix="/users",
@@ -17,7 +16,7 @@ router = APIRouter(
 
 @router.post('/')
 async def create_user(user_data: UserIn) -> UserOut:
-    user = await CreateUserService.create_user(user_data.model_dump())
+    user = await UserService.create_user(user_data.model_dump())
     return user
 
 

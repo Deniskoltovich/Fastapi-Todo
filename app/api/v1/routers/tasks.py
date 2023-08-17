@@ -1,9 +1,8 @@
-from typing import Any, List
+from typing import List
 
 from fastapi import APIRouter, Depends
 
 from app.models.user import User
-from app.permissions import RoleChecker
 from app.schemas.tasks import TaskSchema, TaskSchemaIn
 from app.services.auth import AuthService
 from app.services.task import TaskService

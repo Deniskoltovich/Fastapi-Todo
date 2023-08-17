@@ -1,17 +1,10 @@
-import enum
+from typing import List
 
 from sqlalchemy import Column, Enum, Integer, String
-from sqlalchemy.orm import relationship
-from sqlalchemy_utils import ChoiceType
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.models.tasks import Task
-from app.models.todo_lists import TodoList
-from db.config import Base
-
-
-class UserRole(enum.Enum):
-    ADMIN = 'Admin'
-    USER = 'User'
+from app.enums import UserRole
+from app.models.base import Base
 
 
 class User(Base):
@@ -20,11 +13,11 @@ class User(Base):
     ADMIN = 'Admin'
     USER = 'User'
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(64), nullable=False)
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.USER)
-    todo_lists = relationship(
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(String(64), nullable=False)
+    email: Mapped[str] = mapped_column(String(128), nullable=False)
+    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    role: Mapped[str] = mapped_column(Enum(UserRole), default=UserRole.USER)
+    todo_lists: Mapped[List["TodoList"]] = relationship(
         'TodoList', back_populates='user', cascade='delete'
     )

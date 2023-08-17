@@ -1,13 +1,8 @@
-import enum
-import typing
 from typing import Optional
 
 from pydantic import BaseModel, Field
 
-
-class TaskStatus(str, enum.Enum):
-    IN_PROGRESS = 'in_progress'
-    DONE = 'done'
+from app.enums import TaskStatus
 
 
 class TaskSchema(BaseModel):
